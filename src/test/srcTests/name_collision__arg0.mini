@@ -1,0 +1,7 @@
+// EXPECT:
+// 42
+
+fun main(): Unit {
+  var __arg0: Int = 42
+  println(__arg0)
+}

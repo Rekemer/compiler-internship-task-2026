@@ -1,0 +1,19 @@
+// EXPECT:
+// 10
+// 20
+// 3
+
+fun f(a: Int): Int {
+  println(10)
+  return 1
+}
+
+fun g( b: Int): Int {
+  println(20)
+  return 2
+}
+
+fun main(): Unit {
+  var x: Int = f(2) + g(2)
+  println(x)
+}

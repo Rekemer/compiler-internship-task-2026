@@ -1,0 +1,11 @@
+// EXPECT:
+// ab
+
+fun s(a : Int): String {
+  return "a"
+}
+
+fun main(): Unit {
+  var x: String = s(2) + "b"
+  println(x)
+}

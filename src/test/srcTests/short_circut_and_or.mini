@@ -1,0 +1,15 @@
+// EXPECT:
+// 1
+// 2
+
+fun side(): Boolean {
+  println(999)
+  return true
+}
+
+fun main(): Unit {
+  var a: Boolean = false && side()
+  println(1)
+  var b: Boolean = true || side()
+  println(2)
+}

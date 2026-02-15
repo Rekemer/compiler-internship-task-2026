@@ -1,0 +1,11 @@
+// EXPECT:
+// 5
+// 9
+
+fun main(): Unit {
+  var x: Int = 10 - 3 - 2
+  println(x)
+
+  var y: Int = 10 - (3 - 2)
+  println(y)
+}

@@ -1,0 +1,14 @@
+// EXPECT:
+// 1
+
+fun isPos(x: Int): Boolean {
+  return x > 0
+}
+
+fun main(): Unit {
+  if (isPos(1)) {
+    println(1)
+  } else {
+    println(2)
+  }
+}

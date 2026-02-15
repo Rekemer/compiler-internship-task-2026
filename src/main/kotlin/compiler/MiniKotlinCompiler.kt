@@ -23,7 +23,7 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
     private val boxed = HashSet<String>()
     private fun readVar(name: String) = if (boxed.contains(name)) "$name.v" else name
     private fun writeVar(name: String, rhs: String) = if (boxed.contains(name)) "$name.v = $rhs;" else "$name = $rhs;"
-
+    private var inJavaEntryMain = false;
 
 
     fun mapType(t: MiniKotlinParser.TypeContext): String =
@@ -177,6 +177,13 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
 
     private fun emitReturn(stmt: MiniKotlinParser.ReturnStatementContext, kExpr: String)
     {
+
+        if (inJavaEntryMain) {
+            // Java main ignores CPS: just return
+            emitLine("return;")
+            return
+        }
+
         val e = stmt.expression()
         if (e == null)
         {
@@ -401,10 +408,12 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
 
         if (name == "main")
         {
+            inJavaEntryMain = true;
             sb.append("String[] args")
         }
         else
         {
+            inJavaEntryMain = false;
             val params = fn.parameterList()?.parameter().orEmpty()
             for (i in 0 until params.size)
             {

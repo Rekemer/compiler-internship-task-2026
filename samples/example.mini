@@ -1,17 +1,16 @@
-// Function to calculate factorial
-fun factorial(n: Int): Int {
-    if (n <= 1) {
-        return 1
-    } else {
-        return n * factorial(n - 1)
-    }
-}
+// EXPECT:
+// 111
 
 fun main(): Unit {
-    var result: Int = factorial(5)
-    println(result)
 
-    var a: Int = 10 + 5
-    var b: Boolean = a > 10
-    println(a)
+  var i: Int = 0
+  while (i < 5) {
+    if (i == 3) {
+      println(111)
+      return
+    } else {
+      i = i + 1
+    }
+  }
+  println(222)
 }

@@ -1,0 +1,16 @@
+// EXPECT:
+// 0
+// 1
+// 2
+
+fun lessThan3(x: Int): Boolean {
+  return x < 3
+}
+
+fun main(): Unit {
+  var i: Int = 0
+  while (lessThan3(i)) {
+    println(i)
+    i = i + 1
+  }
+}
