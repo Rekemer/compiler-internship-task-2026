@@ -5,6 +5,8 @@ import MiniKotlinParser
 
 
 /*
+    how to do while loops
+    https://bessiambre.medium.com/continuation-passing-style-patterns-for-javascript-5528449d3070
     how to convert to CPS format
     https://lisperator.net/pltut/compiler/cps-transformer
 */
@@ -17,6 +19,12 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
     private var indent = 0
     private var tmpId = 0
     val returnValueName = "__continuation"
+
+    private val boxed = HashSet<String>()
+    private fun readVar(name: String) = if (boxed.contains(name)) "$name.v" else name
+    private fun writeVar(name: String, rhs: String) = if (boxed.contains(name)) "$name.v = $rhs;" else "$name = $rhs;"
+
+
 
     fun mapType(t: MiniKotlinParser.TypeContext): String =
         when {
@@ -62,7 +70,8 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
         }
         if (p is MiniKotlinParser.IdentifierExprContext)
         {
-            return p.IDENTIFIER().text
+            val name =p.IDENTIFIER().text
+            return readVar(name)
         }
 
         // Paren handled in emitExpr, not here
@@ -181,8 +190,56 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
         tmpId++
         return s
     }
+
+
     private fun emitWhile(wh: MiniKotlinParser.WhileStatementContext, then: Then, kExpr: String, retJava: String)
     {
+        val loopK = fresh("loop")
+        val cond = wh.expression()
+        val body = wh.block()
+        emitLine("final Box<Continuation<Void>> $loopK = new Box<>(null);")
+        emitLine("$loopK.v = new Continuation<Void>() {")
+        indent++
+        emitLine("@Override public void accept(Void __u) {")
+        indent++
+
+
+        emitExpr(cond) { c ->
+            emitLine("if ($c) {")
+            indent++
+
+            // body finishes -> repeat
+            emitBlockIf(
+                body,
+                then = {
+                    emitLine("$loopK.v.accept(null);")
+                    emitLine("return;")
+                },
+                kExpr = kExpr,
+                retJava = retJava
+            )
+
+            indent--
+            emitLine("} else {")
+            indent++
+
+            // loop ends -> continue after while
+            then()
+            emitLine("return;")
+
+            indent--
+            emitLine("}")
+        }
+
+        indent--
+        emitLine("}")
+        indent--
+        emitLine("};")
+
+        // start loop
+        emitLine("$loopK.v.accept(null);")
+        emitLine("return;")
+
 
     }
 
@@ -239,7 +296,7 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
         val rhs = asg.expression()
 
         emitExpr(rhs,) { v ->
-                emitLine("$name = $v;")
+                emitLine(writeVar(name, v))
                 then()
             }
 
@@ -251,8 +308,10 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
         val javaType = mapType(vd.type())
         val init = vd.expression()
 
+        boxed.add(name)
+
         emitExpr(init) { v ->
-            emitLine("$javaType $name = $v;")
+            emitLine("final Box<$javaType> $name = new Box<>($v);")
             then()
         }
     }
