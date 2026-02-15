@@ -1,0 +1,11 @@
+// EXPECT:
+// 111
+// 222
+
+fun main(): Unit {
+  if (false) {
+    println(999)
+  }
+  println(111)
+  println(222)
+}

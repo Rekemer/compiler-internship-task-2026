@@ -1,0 +1,13 @@
+// EXPECT:
+// 1
+// 0
+// 1
+// 0
+
+fun main(): Unit {
+  if (!false) { println(1) } else { println(0) }
+  if (!true) { println(1) } else { println(0) }
+
+  if (true && true) { println(1) } else { println(0) }
+  if (true && false) { println(1) } else { println(0) }
+}

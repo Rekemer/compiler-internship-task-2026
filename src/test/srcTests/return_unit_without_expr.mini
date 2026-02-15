@@ -1,0 +1,13 @@
+// EXPECT:
+// 1
+// 2
+
+fun f(): Unit {
+  println(1)
+  return
+}
+
+fun main(): Unit {
+  f()
+  println(2)
+}

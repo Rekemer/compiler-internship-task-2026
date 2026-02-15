@@ -1,0 +1,15 @@
+// EXPECT:
+// 2
+// 3
+
+fun main(): Unit {
+  var x: Int = 5
+
+  if (x > 0) {
+    if (x > 10) { println(1) } else { println(2) }
+  } else {
+    println(0)
+  }
+
+  if (x == 5) { println(3) } else { println(4) }
+}

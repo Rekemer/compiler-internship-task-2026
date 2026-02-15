@@ -114,7 +114,13 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
         {
 
             is MiniKotlinParser.PrimaryExprContext -> {
-                val v = emitPrimary(e.primary())
+                val p = e.primary()
+                if (p is MiniKotlinParser.ParenExprContext) {
+                    // CPS-evaluate inside parentheses
+                    emitExpr(p.expression(), onValue)
+                    return
+                }
+                val v = emitPrimary(p)
                 onValue(v)
                 return
             }

@@ -132,14 +132,13 @@ class MiniKotlinCompilerTest {
 
             val actual = executionResult.stdout
 
-            // Compare exact output (normalizing Windows newlines)
             val normActual = actual.replace("\r\n", "\n")
             val normExpected = expected.replace("\r\n", "\n")
-            println("HLEEER,")
             assertTrue(
                 normActual.contains(normExpected),
                 "Mismatch for ${mini.fileName}\nExpected to contain:\n$normExpected\nBut got:\n$normActual"
             )
+            println("${mini.fileName} is completed")
         }
     }
 }

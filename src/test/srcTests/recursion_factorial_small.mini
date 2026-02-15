@@ -1,0 +1,14 @@
+// EXPECT:
+// 120
+
+fun fact(n: Int): Int {
+  if (n <= 1) {
+    return 1
+  } else {
+    return n * fact(n - 1)
+  }
+}
+
+fun main(): Unit {
+  println(fact(5))
+}

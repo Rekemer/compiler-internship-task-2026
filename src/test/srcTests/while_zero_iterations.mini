@@ -1,0 +1,11 @@
+// EXPECT:
+// 777
+
+fun main(): Unit {
+  var i: Int = 10
+  while (i < 0) {
+    println(999)
+    i = i + 1
+  }
+  println(777)
+}

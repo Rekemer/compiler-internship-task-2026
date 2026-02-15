@@ -1,0 +1,11 @@
+// EXPECT:
+// 1
+// ab
+
+fun main(): Unit {
+  var s: String = "a" + "b"
+  var t: String = "ab"
+
+  if (s == t) { println(1) } else { println(0) }
+  println(s)
+}
