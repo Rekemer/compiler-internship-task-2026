@@ -1,0 +1,13 @@
+// EXPECT:
+// 1
+// 2
+// 3
+
+fun t(a: Int): Boolean { println(1) return true }
+fun f(a: Int): Boolean { println(2)return false }
+fun side(a: Int): Boolean { println(3) return true }
+
+fun main(): Unit {
+  var x: Boolean = (t(1) && f(1)) || side(1)
+  println(111)
+}

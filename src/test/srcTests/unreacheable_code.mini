@@ -1,0 +1,8 @@
+// EXPECT:
+// 1
+
+fun main(): Unit {
+  println(1)
+  return
+  println(2)
+}

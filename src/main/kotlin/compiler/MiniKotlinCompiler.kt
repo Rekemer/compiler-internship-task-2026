@@ -279,7 +279,7 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
 
             // loop ends -> continue after while
             then()
-            emitLine("return;")
+
 
             indent--
             emitLine("}")
