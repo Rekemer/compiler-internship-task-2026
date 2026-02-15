@@ -49,7 +49,7 @@ class MiniKotlinCompilerTest {
 
     @Test
     fun `compile example_mini outputs 120 and 15`() {
-        val examplePath = Paths.get("samples/example.mini")
+        val examplePath = Paths.get("samples/test.mini")
         val program = parseFile(examplePath)
 
         val compiler = MiniKotlinCompiler()

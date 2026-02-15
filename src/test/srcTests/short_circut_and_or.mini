@@ -2,14 +2,14 @@
 // 1
 // 2
 
-fun side(): Boolean {
+fun side(a : Int): Boolean {
   println(999)
   return true
 }
 
 fun main(): Unit {
-  var a: Boolean = false && side()
+  var a: Boolean = false && side(1)
   println(1)
-  var b: Boolean = true || side()
+  var b: Boolean = true || side(1)
   println(2)
 }

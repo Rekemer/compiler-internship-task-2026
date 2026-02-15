@@ -108,6 +108,47 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
 
         evalArg(0, mutableListOf())
     }
+
+    private fun emitAnd(
+        left: MiniKotlinParser.ExpressionContext,
+        right: MiniKotlinParser.ExpressionContext,
+        onValue: (String) -> Unit
+    ) {
+        emitExpr(left) { l ->
+            emitLine("if (!($l)) {")
+            indent += 2
+            onValue("false")
+            indent -= 2
+            emitLine("} else {")
+            indent += 2
+            emitExpr(right) { r ->
+                onValue(r)
+            }
+            indent -= 2
+            emitLine("}")
+        }
+    }
+
+    private fun emitOr(
+        left: MiniKotlinParser.ExpressionContext,
+        right: MiniKotlinParser.ExpressionContext,
+        onValue: (String) -> Unit
+    ) {
+        emitExpr(left) { l ->
+            emitLine("if (($l)) {")
+            indent += 2
+            onValue("true")
+            indent -= 2
+            emitLine("} else {")
+            indent += 2
+            emitExpr(right) { r ->
+                onValue(r)
+            }
+            indent -= 2
+            emitLine("}")
+        }
+    }
+
     private fun emitExpr(e: MiniKotlinParser.ExpressionContext, onValue: (String) -> Unit)
     {
         when (e)
@@ -157,12 +198,12 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
             }
 
             is MiniKotlinParser.AndExprContext -> {
-                emitBinary(e.expression(0), e.expression(1), "&&", onValue)
+                emitAnd(e.expression(0), e.expression(1), onValue)
                 return
             }
 
             is MiniKotlinParser.OrExprContext -> {
-                emitBinary(e.expression(0), e.expression(1), "||", onValue)
+                emitOr(e.expression(0), e.expression(1), onValue)
                 return
             }
 
