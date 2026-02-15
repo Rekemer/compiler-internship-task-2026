@@ -1,7 +1,37 @@
-# MiniKotlin to Java CPS Compiler
+# MiniKotlin → Java (CPS) Compiler Task
 
-This is an internship assignment for implementing a CPS-style (Continuation-Passing Style) compiler from MiniKotlin (a subset of Kotlin) to Java.
+This repository contains my solution for the internship task: implementing a compiler from a subset of Kotlin to Java, producing code in continuation-passing style (CPS). The goal is to match Kotlin operator semantics within the supported subset.
 
+## Project structure
+
+- `src/main/kotlin/compiler/MiniKotlinCompiler.kt`  
+  Main implementation / modifications.
+
+- `src/test/kotlin/compiler/MiniKotlinCompilerTest.kt`  
+  Test runner.
+
+- `src/test/srcTests/`  
+  tests written as `.mini` programs.
+
+### Test format (`// EXPECT:`)
+
+A test file starts with a `// EXPECT:` block. Everything after `// EXPECT:` (until the first non-comment line) is treated as the expected stdout.
+
+Example:
+```
+// EXPECT:
+//1
+//2
+//3
+fun main() {
+print(1)
+print(2)
+print(3)
+}
+```
+
+
+  
 ## Overview
 
 The goal is to implement a compiler that translates MiniKotlin source code into Java, where all functions are expressed using continuation-passing style.
