@@ -1,0 +1,16 @@
+// EXPECT:
+// 7
+// 1
+
+fun cond(a:Int): Boolean {
+  println(7)
+  return true
+}
+
+fun main(): Unit {
+  if (cond(2)) {
+    println(1)
+  } else {
+    println(2)
+  }
+}

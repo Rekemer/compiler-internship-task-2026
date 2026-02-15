@@ -1,0 +1,15 @@
+// EXPECT:
+// 111
+
+fun main(): Unit {
+  var i: Int = 0
+  while (i < 5) {
+    if (i == 3) {
+      println(111)
+      return
+    } else {
+      i = i + 1
+    }
+  }
+  println(222)
+}

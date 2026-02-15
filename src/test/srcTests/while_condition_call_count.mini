@@ -1,0 +1,18 @@
+// EXPECT:
+// 9
+// 9
+// 9
+// 3
+
+fun cond(i: Int): Boolean {
+  println(9)
+  return i < 3
+}
+
+fun main(): Unit {
+  var i: Int = 0
+  while (cond(i)) {
+    i = i + 1
+  }
+  println(i)
+}

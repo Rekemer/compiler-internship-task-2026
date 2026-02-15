@@ -1,0 +1,18 @@
+// EXPECT:
+//10
+//999
+//1
+//20
+//999
+//2
+
+fun t(a : Int): Boolean { println(10) return true }
+fun f(a : Int): Boolean { println(20) return false }
+fun side(a : Int): Boolean { println(999) return true }
+
+fun main(): Unit {
+  var a: Boolean = t(1) && side(1)
+  println(1)
+  var b: Boolean = f(1) || side(1)
+  println(2)
+}
