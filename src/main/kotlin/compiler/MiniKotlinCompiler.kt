@@ -74,10 +74,10 @@ class MiniKotlinCompiler : MiniKotlinBaseVisitor<String>()
             return readVar(name)
         }
 
-        // Paren handled in emitExpr, not here
         throw RuntimeException("emitPrimary: unsupported primary: " + p.javaClass.simpleName + " text=" + p.text)
     }
 
+    // functions must have at least one call parameter
     private fun emitCallExpr(call: MiniKotlinParser.FunctionCallExprContext, onValue: (String)->Unit)
     {
 

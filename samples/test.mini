@@ -1,7 +1,7 @@
 // EXPECT:
 // 111
 
-fun boom(a: Int): Boolean {
+fun boom(a : Int ): Boolean {
   println(999)
   return true
 }
@@ -10,3 +10,7 @@ fun main(): Unit {
   var b: Boolean = false && boom(1)
   if (b) { println(222) } else { println(111) }
 }
+
+
+
+

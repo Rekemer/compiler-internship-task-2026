@@ -2,12 +2,12 @@
 // 1
 // 2
 
-fun f(): Unit {
+fun f(a: Int): Unit {
   println(1)
   return
 }
 
 fun main(): Unit {
-  f()
+  f(1)
   println(2)
 }
