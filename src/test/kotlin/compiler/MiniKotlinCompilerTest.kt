@@ -11,6 +11,10 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import kotlin.io.path.extension
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.name
+import kotlin.io.path.readText
 
 class MiniKotlinCompilerTest {
 
@@ -64,5 +68,78 @@ class MiniKotlinCompilerTest {
         val output = executionResult.stdout
         assertTrue(output.contains("120"), "Expected output to contain factorial result 120, but got: $output")
         assertTrue(output.contains("15"), "Expected output to contain arithmetic result 15, but got: $output")
+    }
+
+
+
+    private fun extractExpectedOutput(source: String): String? {
+        // Supports:
+        // 1) // EXPECT: one line
+        // 2) // EXPECT:\n// line1\n// line2\n
+        val lines = source.lines()
+        val idx = lines.indexOfFirst { it.trim().startsWith("// EXPECT") }
+        if (idx == -1) return null
+
+        val first = lines[idx].trim()
+
+        if (first == "// EXPECT:" || first == "// EXPECT") {
+            val out = StringBuilder()
+            var j = idx + 1
+            while (j < lines.size) {
+                val t = lines[j].trim()
+                if (!t.startsWith("//")) break
+                out.append(t.removePrefix("//").trimStart()).append("\n")
+                j++
+            }
+            return out.toString()
+        }
+
+        return null
+    }
+
+    @Test
+    fun `run test folder`() {
+        val dir = Paths.get("src/test", "srcTests")
+        assertTrue(dir.toFile().exists(), "Missing folder: $dir")
+
+        val files = Files.walk(dir)
+            .filter { it.isRegularFile() && it.extension == "mini" }
+            .toList()
+            .sortedBy { it.name }
+
+        assertTrue(files.isNotEmpty(), "No .mini files found in $dir")
+
+        val stdlibPath = resolveStdlibPath()
+        val javaCompiler = JavaRuntimeCompiler()
+
+        for (mini in files) {
+            val src = mini.readText()
+            val expected = extractExpectedOutput(src)
+                ?: error("No EXPECT comment found in ${mini.fileName}")
+
+            val program = parseFile(mini)
+            val compiler = MiniKotlinCompiler()
+            val javaCode = compiler.compile(program)
+
+            val javaFile = tempDir.resolve("MiniProgram.java")
+            Files.writeString(javaFile, javaCode)
+
+            val (compilationResult, executionResult) =
+                javaCompiler.compileAndExecute(javaFile, stdlibPath)
+
+            assertIs<CompilationResult.Success>(compilationResult, "Compilation failed for ${mini.fileName}")
+            assertIs<ExecutionResult.Success>(executionResult, "Execution failed for ${mini.fileName}")
+
+            val actual = executionResult.stdout
+
+            // Compare exact output (normalizing Windows newlines)
+            val normActual = actual.replace("\r\n", "\n")
+            val normExpected = expected.replace("\r\n", "\n")
+            println("HLEEER,")
+            assertTrue(
+                normActual.contains(normExpected),
+                "Mismatch for ${mini.fileName}\nExpected to contain:\n$normExpected\nBut got:\n$normActual"
+            )
+        }
     }
 }

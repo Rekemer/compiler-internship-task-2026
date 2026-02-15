@@ -8,33 +8,10 @@ fun factorial(n: Int): Int {
 }
 
 fun main(): Unit {
+    var result: Int = factorial(5)
+    println(result)
 
-var i: Int = 0
-var sum: Int = 0
-while (i < 15) {
-  sum = sum + i
-  i = i + 1
+    var a: Int = 10 + 5
+    var b: Boolean = a > 10
+    println(a)
 }
-println(sum)
-
-    //var result: Int = factorial(5)
-    //println(result)
-    //var a: Int = 10 + 5
-    //var b: Boolean = a > 10
-    //println(a)
-}
-
-/*
-
-fun add1(x: Int): Int {
-  return x + 1
-}
-
-fun main(): Unit
-{
-    var res : Int = add1(add1(3+3))
-
-    println(res)
-    //val y: Int = add1(5)
-}*/
-

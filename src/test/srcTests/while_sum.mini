@@ -1,0 +1,11 @@
+// EXPECT:
+// 10
+fun main(): Unit {
+  var i: Int = 0
+  var sum: Int = 0
+  while (i < 5) {
+    sum = sum + i
+    i = i + 1
+  }
+  println(sum)
+}
